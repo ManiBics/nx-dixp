@@ -11,6 +11,7 @@ import FeaturedProducts from "@/components/RetailShop/Home/FeaturedProducts";
 import ListingBanner from "@/components/RetailShop/Products/ListingBanner";
 import ProductListing from "@/components/RetailShop/Products/ProductListing";
 import CartProvider from "@/context/CartContext";
+import ViewCart from "@/components/RetailShop/Cart";
 
 const componentMap = {
   headerSection: RetailHeader,
@@ -20,6 +21,7 @@ const componentMap = {
   brandSection: WelcomeBanner,
   listingBanner: ListingBanner,
   productListing: ProductListing,
+  viewCart: ViewCart,
 };
 
 export default function ComposablePage({ params }) {

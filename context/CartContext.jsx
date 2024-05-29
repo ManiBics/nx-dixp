@@ -4,6 +4,7 @@ import {
   createCart,
   getCart,
   removeItemFromCart,
+  updateItemQuantityToCart,
 } from "./apiHandler";
 
 const CartContext = createContext();
@@ -39,11 +40,12 @@ const CartProvider = ({ children }) => {
     if (updatedCart.id) setCart(updatedCart);
   };
 
-  const updateItemQuantity = async (lineItemId, quantity) => {
-    const updatedCart = await updateItemQuantity(
+  const updateItemQuantity = async (lineItemId, quantity, pricevalue) => {
+    const updatedCart = await updateItemQuantityToCart(
       cart.id,
       lineItemId,
       quantity,
+      pricevalue,
       cart.version
     );
     if (updatedCart.id) setCart(updatedCart);

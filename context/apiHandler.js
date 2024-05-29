@@ -63,14 +63,15 @@ const removeItemFromCart = async (cartId, lineItemId, version) => {
   return data;
 };
 
-const updateItemQuantity = async (cartId, lineItemId, quantity, version) => {
-  const token = await getAuthToken();
-  const response = await fetch(`${apiUrl}/${projectKey}/carts/${cartId}`, {
+const updateItemQuantityToCart = async (
+  cartId,
+  lineItemId,
+  quantity,
+  pricevalue,
+  version
+) => {
+  const response = await fetch(`/api/updateCart?id=${cartId}`, {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({
       version,
       actions: [
@@ -78,6 +79,11 @@ const updateItemQuantity = async (cartId, lineItemId, quantity, version) => {
           action: "changeLineItemQuantity",
           lineItemId,
           quantity,
+          externalPrice: {
+            type: "centPrecision",
+            centAmount: Math.round(pricevalue * quantity * 100) || 0,
+            currencyCode: "EUR",
+          },
         },
       ],
     }),
@@ -91,5 +97,5 @@ export {
   getCart,
   addItemToCart,
   removeItemFromCart,
-  updateItemQuantity,
+  updateItemQuantityToCart,
 };
