@@ -3,6 +3,7 @@ import {
   addItemToCart,
   createCart,
   getCart,
+  removeCart,
   removeItemFromCart,
   updateItemQuantityToCart,
 } from "./apiHandler";
@@ -20,8 +21,10 @@ const CartProvider = ({ children }) => {
         setCart(cartData);
       } else {
         const cartData = await createCart();
-        if (cartData.id) localStorage.setItem("cartId", cartData.id);
-        setCart(cartData);
+        if (cartData.id) {
+          localStorage.setItem("cartId", cartData.id);
+          setCart(cartData);
+        }
       }
     })();
   }, []);
@@ -55,9 +58,24 @@ const CartProvider = ({ children }) => {
     return cart?.lineItems?.find((item) => item?.variant?.sku === sku);
   };
 
+  const cancelOrder = async () => {
+    const updatedCart = await removeCart(cart.id, cart.version);
+    if (updatedCart.id) {
+      setCart(null);
+      localStorage.removeItem("cartId");
+    }
+  };
+
   return (
     <CartContext.Provider
-      value={{ cart, addItem, removeItem, updateItemQuantity, isInCart }}
+      value={{
+        cart,
+        addItem,
+        removeItem,
+        updateItemQuantity,
+        isInCart,
+        cancelOrder,
+      }}
     >
       {children}
     </CartContext.Provider>

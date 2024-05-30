@@ -8,7 +8,7 @@ import { getLocale } from "@/utils";
 import { useParams, useRouter } from "next/navigation";
 import { getPageFromSlug } from "@/utils/content";
 
-const CartItem = ({ item, updateItemQuantity }) => {
+const CartItem = ({ item, updateItemQuantity, removeItem }) => {
   const quantity = item?.quantity || 1;
   return (
     <div className="flex justify-between items-center p-4 bg-white shadow-md rounded-md my-2">
@@ -48,7 +48,7 @@ const CartItem = ({ item, updateItemQuantity }) => {
       <div className="text-right h-full flex flex-col">
         <div>
           <IconButton
-            onClick={() => updateItemQuantity(item.id, 0, item?.pricevalue)}
+            onClick={() => removeItem(item.id)}
             color="error"
             aria-label="delete"
           >
@@ -71,7 +71,7 @@ const Cart = ({ items }) => {
   );
   const totalItems = items?.reduce((sum, item) => sum + item.quantity, 0);
 
-  const { isInCart, updateItemQuantity } = useCart();
+  const { isInCart, updateItemQuantity, removeItem, cancelOrder } = useCart();
 
   const router = useRouter();
   return (
@@ -83,6 +83,7 @@ const Cart = ({ items }) => {
             {items.map((item) => (
               <CartItem
                 updateItemQuantity={updateItemQuantity}
+                removeItem={removeItem}
                 isInCart={isInCart}
                 key={item.id}
                 item={item}
@@ -108,7 +109,7 @@ const Cart = ({ items }) => {
             justifyContent="flex-end"
             spacing={2}
           >
-            <Button variant="outlined" color="error">
+            <Button onClick={cancelOrder} variant="outlined" color="error">
               Cancel Order
             </Button>
             <Button
@@ -159,6 +160,8 @@ const ViewCart = () => {
         };
       });
       setCartContentful(newCart);
+    } else if (!cart) {
+      setCartContentful([]);
     }
   }, [productListing, cart]);
 

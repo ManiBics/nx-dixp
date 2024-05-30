@@ -92,10 +92,22 @@ const updateItemQuantityToCart = async (
   return data;
 };
 
+const removeCart = async (cartId, version) => {
+  const response = await fetch(
+    `/api/deleteCart?id=${cartId}&version=${version}`,
+    {
+      method: "DELETE",
+    }
+  );
+  const data = await response.json();
+  return data;
+};
+
 export {
   createCart,
   getCart,
   addItemToCart,
   removeItemFromCart,
   updateItemQuantityToCart,
+  removeCart,
 };
