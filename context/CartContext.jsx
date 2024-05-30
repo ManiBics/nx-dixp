@@ -2,16 +2,19 @@ import React, { createContext, useState, useEffect, useContext } from "react";
 import {
   addItemToCart,
   createCart,
+  createOrderFromCart,
   getCart,
   removeCart,
   removeItemFromCart,
   updateItemQuantityToCart,
 } from "./apiHandler";
+import { useRouter } from "next/navigation";
 
 const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -66,6 +69,15 @@ const CartProvider = ({ children }) => {
     }
   };
 
+  const createOrder = async () => {
+    const updatedCart = await createOrderFromCart(cart.id, cart.version);
+    if (updatedCart.id) {
+      setCart(null);
+      localStorage.removeItem("cartId");
+      router.push("/order-placed");
+    }
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -75,6 +87,7 @@ const CartProvider = ({ children }) => {
         updateItemQuantity,
         isInCart,
         cancelOrder,
+        createOrder,
       }}
     >
       {children}

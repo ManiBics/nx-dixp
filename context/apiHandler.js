@@ -14,6 +14,16 @@ const createCart = async () => {
       method: "POST",
       body: JSON.stringify({
         currency: "EUR",
+        taxMode: "External",
+        deleteDaysAfterLastModification: 5,
+        shippingAddress: {
+          country: "GB",
+          streetName: "",
+          streetNumber: "",
+          city: "",
+          region: "",
+          state: "",
+        },
       }),
     });
     const data = await response.json();
@@ -37,6 +47,12 @@ const addItemToCart = async (cartId, product, version) => {
             type: "centPrecision",
             centAmount: Math.round(product.pricevalue * 100) || 0,
             currencyCode: "EUR",
+          },
+          externalTaxRate: {
+            name: "tax",
+            country: "GB",
+            includedInPrice: true,
+            amount: 0,
           },
         },
       ],
@@ -103,6 +119,21 @@ const removeCart = async (cartId, version) => {
   return data;
 };
 
+const createOrderFromCart = async (cartId, version) => {
+  const response = await fetch(`/api/createOrder`, {
+    method: "POST",
+    body: JSON.stringify({
+      cart: {
+        id: cartId,
+        typeId: "cart",
+      },
+      version,
+    }),
+  });
+  const data = await response.json();
+  return data;
+};
+
 export {
   createCart,
   getCart,
@@ -110,4 +141,5 @@ export {
   removeItemFromCart,
   updateItemQuantityToCart,
   removeCart,
+  createOrderFromCart,
 };

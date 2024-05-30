@@ -13,7 +13,8 @@ const Cart = ({ items, ...rest }) => {
   );
   const totalItems = items?.reduce((sum, item) => sum + item.quantity, 0);
 
-  const { isInCart, updateItemQuantity, removeItem, cancelOrder } = useCart();
+  const { isInCart, updateItemQuantity, removeItem, cancelOrder, createOrder } =
+    useCart();
 
   const router = useRouter();
   return (
@@ -74,7 +75,11 @@ const Cart = ({ items, ...rest }) => {
             >
               {rest.continueShopping.label}
             </Button>
-            <Button variant={rest.placeOrder.theme} color="success">
+            <Button
+              onClick={createOrder}
+              variant={rest.placeOrder.theme}
+              color="success"
+            >
               {rest.placeOrder.label}
             </Button>
           </Stack>
