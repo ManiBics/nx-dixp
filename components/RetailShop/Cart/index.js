@@ -1,70 +1,12 @@
-import { Button, ButtonGroup, IconButton, Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import RemoveIcon from "@mui/icons-material/Remove";
-import AddIcon from "@mui/icons-material/Add";
-import ClearIcon from "@mui/icons-material/Clear";
 import { useCart } from "@/context/CartContext";
 import { getLocale } from "@/utils";
 import { useParams, useRouter } from "next/navigation";
 import { getPageFromSlug } from "@/utils/content";
+import CartItem from "./CartItem";
 
-const CartItem = ({ item, updateItemQuantity, removeItem }) => {
-  const quantity = item?.quantity || 1;
-  return (
-    <div className="flex justify-between items-center p-4 bg-white shadow-md rounded-md my-2">
-      <div className="flex items-center">
-        <img
-          className="w-16 h-16 object-cover rounded-md"
-          src={item.productImage.src}
-          alt={item.productImage.src}
-          data-sb-object-id={item.productImage.id}
-        />
-        <div className="ml-4">
-          <h2 className="text-lg font-semibold">{item.productTitle1}</h2>
-          <p className="text-sm text-gray-600 line-clamp-1">
-            {item.productDescription}
-          </p>
-          <div className="mt-2">
-            <ButtonGroup variant="outlined" aria-label="Basic button group">
-              <Button
-                onClick={() =>
-                  updateItemQuantity(item.id, quantity - 1, item?.pricevalue)
-                }
-              >
-                <RemoveIcon fontSize="small" />
-              </Button>
-              <Button>{quantity}</Button>
-              <Button
-                onClick={() =>
-                  updateItemQuantity(item.id, quantity + 1, item?.pricevalue)
-                }
-              >
-                <AddIcon fontSize="small" />
-              </Button>
-            </ButtonGroup>
-          </div>
-        </div>
-      </div>
-      <div className="text-right h-full flex flex-col">
-        <div>
-          <IconButton
-            onClick={() => removeItem(item.id)}
-            color="error"
-            aria-label="delete"
-          >
-            <ClearIcon />
-          </IconButton>
-        </div>
-
-        <p className="text-lg font-semibold mt-auto">
-          ${(item?.price?.value?.centAmount / 100).toFixed(2)}
-        </p>
-      </div>
-    </div>
-  );
-};
-
-const Cart = ({ items }) => {
+const Cart = ({ items, ...rest }) => {
   const total = items?.reduce(
     (sum, item) => sum + item.price.value.centAmount,
     0
@@ -77,7 +19,7 @@ const Cart = ({ items }) => {
   return (
     <div className="container mx-auto p-4 flex flex-col">
       <div className="flex-grow">
-        <h1 className="text-2xl font-bold mb-4 mt-2">Your Shopping Cart</h1>
+        <h1 className="text-2xl font-bold mb-4 mt-2">{rest.title}</h1>
         {items?.length > 0 ? (
           <div className="grid grid-cols-2 gap-6">
             {items.map((item) => (
@@ -91,16 +33,22 @@ const Cart = ({ items }) => {
             ))}
           </div>
         ) : (
-          <p className="text-center text-gray-600">Your cart is empty.</p>
+          <p className="text-center text-gray-600">{rest.emptycartMessage}</p>
         )}
       </div>
       {items?.length > 0 && (
         <div className="mt-4 p-4 bg-white  ">
           <div className="flex  justify-end">
             <div>
-              <h2 className="text-xl font-semibold">Cart Summary</h2>
-              <p className="mt-2">Total Products: {totalItems}</p>
-              <p className="mt-2">Total: ${(total / 100).toFixed(2)}</p>
+              <h2 className="text-xl font-semibold">
+                {rest.cartSummary.title}
+              </h2>
+              <p className="mt-2">
+                {rest.cartSummary.totalProducts} {totalItems}
+              </p>
+              <p className="mt-2">
+                {rest.cartSummary.productTotal} ${(total / 100).toFixed(2)}
+              </p>
             </div>
           </div>
           <Stack
@@ -109,18 +57,25 @@ const Cart = ({ items }) => {
             justifyContent="flex-end"
             spacing={2}
           >
-            <Button onClick={cancelOrder} variant="outlined" color="error">
-              Cancel Order
+            <Button
+              onClick={cancelOrder}
+              variant={rest.cancelOrder.theme}
+              color="error"
+            >
+              {rest.cancelOrder.label}
             </Button>
             <Button
-              onClick={() => router.push("/products")}
-              variant="outlined"
+              onClick={() => {
+                if (rest.continueShopping.url)
+                  router.push(rest.continueShopping.url);
+              }}
+              variant={rest.continueShopping.theme}
               color="primary"
             >
-              Continue Shopping
+              {rest.continueShopping.label}
             </Button>
-            <Button variant="contained" color="success">
-              Place Order
+            <Button variant={rest.placeOrder.theme} color="success">
+              {rest.placeOrder.label}
             </Button>
           </Stack>
         </div>
@@ -129,7 +84,7 @@ const Cart = ({ items }) => {
   );
 };
 
-const ViewCart = () => {
+const ViewCart = (props) => {
   const { cart } = useCart();
   const params = useParams();
   const [productListing, setProductListing] = useState([]);
@@ -168,7 +123,7 @@ const ViewCart = () => {
   return (
     <div className="flex flex-col" style={{ minHeight: "calc(100vh - 400px)" }}>
       <main className="flex-grow flex">
-        <Cart items={cartContentful} />
+        <Cart items={cartContentful} {...props} />
       </main>
     </div>
   );
