@@ -13,6 +13,7 @@ import ProductListing from "@/components/RetailShop/Products/ProductListing";
 import CartProvider from "@/context/CartContext";
 import ViewCart from "@/components/RetailShop/Cart";
 import ThankYouPage from "@/components/RetailShop/OrderPlaced";
+import BackdropProvider from "@/context/BackDropContext";
 
 const componentMap = {
   headerSection: RetailHeader,
@@ -39,18 +40,20 @@ export default function ComposablePage({ params }) {
   }, [params?.slug]);
 
   return (
-    <CartProvider>
-      {data?.sections?.map((section, idx) => {
-        const Component = componentMap[section.type];
-        if (!Component)
-          return (
-            <div key={idx} className="text-red-500 text-center">
-              Component is missing
-            </div>
-          );
-        return <Component key={idx} {...section} />;
-      })}
-      {data.error && <NotFound />}
-    </CartProvider>
+    <BackdropProvider>
+      <CartProvider>
+        {data?.sections?.map((section, idx) => {
+          const Component = componentMap[section.type];
+          if (!Component)
+            return (
+              <div key={idx} className="text-red-500 text-center">
+                Component is missing
+              </div>
+            );
+          return <Component key={idx} {...section} />;
+        })}
+        {data.error && <NotFound />}
+      </CartProvider>
+    </BackdropProvider>
   );
 }

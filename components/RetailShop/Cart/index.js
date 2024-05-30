@@ -5,6 +5,7 @@ import { getLocale } from "@/utils";
 import { useParams, useRouter } from "next/navigation";
 import { getPageFromSlug } from "@/utils/content";
 import CartItem from "./CartItem";
+import { useBackDrop } from "@/context/BackDropContext";
 
 const Cart = ({ items, ...rest }) => {
   const total = items?.reduce(
@@ -94,13 +95,16 @@ const ViewCart = (props) => {
   const params = useParams();
   const [productListing, setProductListing] = useState([]);
   const [cartContentful, setCartContentful] = useState([]);
+  const { showBackDrop, hideBackDrop } = useBackDrop();
 
   useEffect(() => {
     (async () => {
+      showBackDrop();
       const { locale = "en-US" } = getLocale(params?.slug);
       const slug = "/product-listing";
       const page = await getPageFromSlug(slug, locale, "productListing");
       setProductListing(page.products);
+      hideBackDrop();
     })();
   }, [params?.slug]);
 
