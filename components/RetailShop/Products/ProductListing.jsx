@@ -1,8 +1,8 @@
 import { useCart } from "@/context/CartContext";
-import { Button, ButtonGroup } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import RemoveIcon from "@mui/icons-material/Remove";
-import AddIcon from "@mui/icons-material/Add";
+import Select from "@mui/joy/Select";
+import { optionFrom1ToN } from "@/utils";
 
 // ProductCard component
 const ProductCard = ({ product, addItem, isInCart, updateItemQuantity }) => {
@@ -13,6 +13,10 @@ const ProductCard = ({ product, addItem, isInCart, updateItemQuantity }) => {
   const handleAddItem = () => {
     addItem(product);
   };
+
+  const getOptions = optionFrom1ToN(
+    inCart?.variant?.availability?.availableQuantity
+  );
 
   return (
     <div
@@ -56,33 +60,22 @@ const ProductCard = ({ product, addItem, isInCart, updateItemQuantity }) => {
           </div>
 
           <div className="flex items-center">
-            {inCart && (
-              <ButtonGroup variant="contained" aria-label="Basic button group">
-                <Button
-                  onClick={() =>
-                    updateItemQuantity(
-                      inCart.id,
-                      quantity - 1,
-                      product.pricevalue
-                    )
-                  }
+            {inCart &&
+              (getOptions.length > 1 ? (
+                <Select
+                  color="primary"
+                  placeholder="Quantity"
+                  onChange={(event, newValue) => {
+                    updateItemQuantity(inCart.id, newValue, product.pricevalue);
+                  }}
+                  value={quantity}
+                  className="w-28"
                 >
-                  <RemoveIcon fontSize="small" />
-                </Button>
-                <Button>{quantity}</Button>
-                <Button
-                  onClick={() =>
-                    updateItemQuantity(
-                      inCart.id,
-                      quantity + 1,
-                      product.pricevalue
-                    )
-                  }
-                >
-                  <AddIcon fontSize="small" />
-                </Button>
-              </ButtonGroup>
-            )}
+                  {getOptions}
+                </Select>
+              ) : (
+                <Typography color="error">Out of Stock</Typography>
+              ))}
             {!inCart && CartButton && (
               <Button
                 onClick={handleAddItem}

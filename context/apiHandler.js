@@ -24,6 +24,7 @@ const createCart = async () => {
           region: "",
           state: "",
         },
+        inventoryMode: "TrackOnly",
       }),
     });
     const data = await response.json();
@@ -94,7 +95,7 @@ const updateItemQuantityToCart = async (
         {
           action: "changeLineItemQuantity",
           lineItemId,
-          quantity,
+          quantity: +quantity,
           externalPrice: {
             type: "centPrecision",
             centAmount: Math.round(pricevalue * quantity * 100) || 0,

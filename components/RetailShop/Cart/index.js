@@ -124,7 +124,7 @@ const ViewCart = (props) => {
         };
       });
       setCartContentful(newCart);
-    } else if (!cart) {
+    } else if (!cart || !cart?.lineItems?.length) {
       setCartContentful([]);
     }
   }, [productListing, cart]);

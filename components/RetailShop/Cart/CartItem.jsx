@@ -1,10 +1,13 @@
-import { Button, ButtonGroup, IconButton } from "@mui/material";
-import RemoveIcon from "@mui/icons-material/Remove";
-import AddIcon from "@mui/icons-material/Add";
+import { IconButton, Typography } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
+import { optionFrom1ToN } from "@/utils";
+import { Select } from "@mui/joy";
 
 const CartItem = ({ item, updateItemQuantity, removeItem }) => {
   const quantity = item?.quantity || 1;
+  const getOptions = optionFrom1ToN(
+    item?.variant?.availability?.availableQuantity
+  );
   return (
     <div className="flex justify-between items-center p-4 bg-white shadow-md rounded-md my-2">
       <div className="flex items-center">
@@ -20,23 +23,21 @@ const CartItem = ({ item, updateItemQuantity, removeItem }) => {
             {item.productDescription}
           </p>
           <div className="mt-2">
-            <ButtonGroup variant="outlined" aria-label="Basic button group">
-              <Button
-                onClick={() =>
-                  updateItemQuantity(item.id, quantity - 1, item?.pricevalue)
-                }
+            {getOptions.length > 1 ? (
+              <Select
+                color="primary"
+                placeholder="Quantity"
+                onChange={(event, newValue) => {
+                  updateItemQuantity(item.id, newValue, item?.pricevalue);
+                }}
+                value={quantity}
+                className="w-28"
               >
-                <RemoveIcon fontSize="small" />
-              </Button>
-              <Button>{quantity}</Button>
-              <Button
-                onClick={() =>
-                  updateItemQuantity(item.id, quantity + 1, item?.pricevalue)
-                }
-              >
-                <AddIcon fontSize="small" />
-              </Button>
-            </ButtonGroup>
+                {getOptions}
+              </Select>
+            ) : (
+              <Typography color="error">Out of Stock</Typography>
+            )}
           </div>
         </div>
       </div>
