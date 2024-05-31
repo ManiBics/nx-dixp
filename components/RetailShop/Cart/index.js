@@ -1,4 +1,4 @@
-import { Button, Stack } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { getLocale } from "@/utils";
@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { getPageFromSlug } from "@/utils/content";
 import CartItem from "./CartItem";
 import { useBackDrop } from "@/context/BackDropContext";
+import Checkout from "../Checkout";
 
 const Cart = ({ items, ...rest }) => {
   const total = items?.reduce(
@@ -18,6 +19,11 @@ const Cart = ({ items, ...rest }) => {
     useCart();
 
   const router = useRouter();
+
+  const hasOutOfStock = items?.some(
+    (item) => !item?.variant?.availability?.availableQuantity > 0
+  );
+
   return (
     <div className="container mx-auto p-4 flex flex-col">
       <div className="flex-grow">
@@ -59,6 +65,14 @@ const Cart = ({ items, ...rest }) => {
             justifyContent="flex-end"
             spacing={2}
           >
+            <div className="flex items-end">
+              {hasOutOfStock && (
+                <Typography color="error">
+                  One or more items in your cart are currenlty out of stock.
+                </Typography>
+              )}
+            </div>
+
             <Button
               onClick={cancelOrder}
               variant={rest.cancelOrder.theme}
@@ -76,13 +90,12 @@ const Cart = ({ items, ...rest }) => {
             >
               {rest.continueShopping.label}
             </Button>
-            <Button
-              onClick={createOrder}
-              variant={rest.placeOrder.theme}
-              color="success"
-            >
-              {rest.placeOrder.label}
-            </Button>
+
+            <Checkout
+              {...rest.placeOrder}
+              items={items}
+              hasOutOfStock={hasOutOfStock}
+            />
           </Stack>
         </div>
       )}

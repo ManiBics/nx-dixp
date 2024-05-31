@@ -87,7 +87,6 @@ const CartProvider = ({ children }) => {
     if (updatedCart.id) {
       setCart(null);
       localStorage.removeItem("cartId");
-      router.push("/order-placed");
     }
     hideBackDrop();
   };

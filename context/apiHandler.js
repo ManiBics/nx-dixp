@@ -1,3 +1,5 @@
+import { currency } from "@/utils/constant";
+
 const getCart = async (id) => {
   try {
     const res = await fetch(`/api/getCart?id=${id}`);
@@ -13,7 +15,7 @@ const createCart = async () => {
     const response = await fetch("/api/createCart", {
       method: "POST",
       body: JSON.stringify({
-        currency: "EUR",
+        currency,
         taxMode: "External",
         deleteDaysAfterLastModification: 5,
         shippingAddress: {
@@ -47,7 +49,7 @@ const addItemToCart = async (cartId, product, version) => {
           externalPrice: {
             type: "centPrecision",
             centAmount: Math.round(product.pricevalue * 100) || 0,
-            currencyCode: "EUR",
+            currencyCode: currency,
           },
           externalTaxRate: {
             name: "tax",
@@ -99,7 +101,7 @@ const updateItemQuantityToCart = async (
           externalPrice: {
             type: "centPrecision",
             centAmount: Math.round(pricevalue * quantity * 100) || 0,
-            currencyCode: "EUR",
+            currencyCode: currency,
           },
         },
       ],

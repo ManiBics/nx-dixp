@@ -5,12 +5,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 const CartContext = createContext();
 
 export default function BackdropProvider({ children }) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(0);
   const hideBackDrop = () => {
-    setOpen(false);
+    setOpen((prev) => prev + 1);
   };
   const showBackDrop = () => {
-    setOpen(true);
+    setOpen((prev) => prev - 1);
   };
 
   return (
@@ -20,7 +20,7 @@ export default function BackdropProvider({ children }) {
           zIndex: (theme) => theme.zIndex.drawer + 1,
           bgcolor: "rgba(255,255,255,.3)",
         }}
-        open={open}
+        open={Boolean(open)}
       >
         <CircularProgress size={50} color="primary" />
       </Backdrop>

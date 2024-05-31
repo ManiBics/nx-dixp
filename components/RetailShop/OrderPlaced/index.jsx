@@ -1,9 +1,18 @@
+import { useCart } from "@/context/CartContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 
 const OrderPlaced = (props) => {
   const router = useRouter();
+  const { cart, createOrder } = useCart();
+
+  useEffect(() => {
+    if (cart?.id) {
+      createOrder();
+    }
+  }, [cart?.id]);
+
   return (
     <div className="flex flex-col items-center justify-center bg-white text-gray-800 my-10">
       <div className="text-center">
