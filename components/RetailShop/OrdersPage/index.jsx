@@ -5,13 +5,16 @@ const orders = [
   { id: 1, product: "Product 1", status: "Shipped", date: "2024-06-01" },
   { id: 2, product: "Product 2", status: "Processing", date: "2024-06-03" },
   { id: 3, product: "Product 3", status: "Delivered", date: "2024-06-02" },
+  { id: 4, product: "Product 3", status: "Delivered", date: "2024-06-02" },
+  { id: 5, product: "Product 3", status: "Delivered", date: "2024-06-02" },
+  { id: 6, product: "Product 3", status: "Delivered", date: "2024-06-02" },
   // Add more orders as needed
 ];
 
 const OrdersPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 10;
+  const ordersPerPage = 5;
 
   const filteredOrders = orders.filter((order) =>
     order.product.toLowerCase().includes(searchTerm.toLowerCase())
@@ -44,31 +47,31 @@ const OrdersPage = () => {
             className="p-2 border border-gray-300 rounded-md"
           />
         </div>
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-          <table className="min-w-full divide-y divide-gray-200">
+        <div className="bg-white shadow overflow-hidden sm:rounded-lg ">
+          <table className="min-w-full divide-y divide-gray-200 ">
             <thead className="bg-gray-50">
               <tr>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider"
                 >
                   Order ID
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider"
                 >
                   Product
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider"
                 >
                   Status
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider"
                 >
                   Date
                 </th>
@@ -81,13 +84,13 @@ const OrdersPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {order.id}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm ">
                       {order.product}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm ">
                       {order.status}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm ">
                       {order.date}
                     </td>
                   </tr>
@@ -96,7 +99,7 @@ const OrdersPage = () => {
                 <tr>
                   <td
                     colSpan="4"
-                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center"
+                    className="px-6 py-4 whitespace-nowrap text-sm  text-center"
                   >
                     No orders found
                   </td>
@@ -117,9 +120,11 @@ const OrdersPage = () => {
             <button
               key={index + 1}
               onClick={() => handlePageChange(index + 1)}
-              className={`px-3 py-1 mx-1 border border-gray-300 rounded-md ${
-                currentPage === index + 1 ? "bg-gray-300" : "bg-gray-200"
-              } text-gray-700 hover:bg-gray-300`}
+              className={`px-3 py-1 ${
+                currentPage === index + 1
+                  ? "bg-[#1976d2] text-white"
+                  : "bg-gray-200 text-gray-800"
+              } rounded-md focus:outline-none mx-1`}
             >
               {index + 1}
             </button>

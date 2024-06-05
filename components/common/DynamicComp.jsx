@@ -15,6 +15,7 @@ import ThankYouPage from "@/components/RetailShop/OrderPlaced";
 import { useParams } from "next/navigation";
 import { useBackDrop } from "@/context/BackDropContext";
 import OrdersPage from "../RetailShop/OrdersPage";
+import OrderDetails from "../RetailShop/OrderDetails";
 
 const componentMap = {
   headerSection: RetailHeader,
@@ -27,6 +28,7 @@ const componentMap = {
   viewCart: ViewCart,
   home: ThankYouPage,
   ordersContent: OrdersPage,
+  orderDetailsContent: OrderDetails,
 };
 
 const DynamicComp = () => {
