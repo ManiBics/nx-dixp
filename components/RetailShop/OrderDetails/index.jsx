@@ -1,3 +1,4 @@
+import Table from "@/components/common/Table";
 import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -29,6 +30,14 @@ const OrderDetails = () => {
     ],
     total: 109.97,
   };
+
+  const columns = [
+    { title: "IMAGE", key: "image" },
+    { title: "NAME", key: "name" },
+    { title: "CATEGORY", key: "category" },
+    { title: "QUANTITY", key: "quantity" },
+    { title: "PRICE", key: "price" },
+  ];
 
   return (
     <div className="bg-white p-8">
@@ -62,78 +71,7 @@ const OrderDetails = () => {
       </div>
       <div>
         <h3 className="text-lg font-semibold mb-2">Items</h3>
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-                >
-                  Image
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-                >
-                  Name
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-                >
-                  Category
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-                >
-                  Quantity
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-                >
-                  Price
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-                >
-                  Weight
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {order.items.map((item, index) => (
-                <tr key={index}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="h-10 w-10 rounded object-cover"
-                    />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {item.name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    {item.category}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    {item.quantity}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    ${item.price.toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    {item.weight}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Table rows={order.items} columns={columns} />
       </div>
       <div className="mt-4 flex justify-end">
         <div className="text-lg font-semibold">Total:</div>
