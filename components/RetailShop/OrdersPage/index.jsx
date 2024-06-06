@@ -1,5 +1,6 @@
 // src/components/OrdersPage.js
 import Pagination from "@/components/common/Pagination";
+import Table from "@/components/common/Table";
 import React, { useState } from "react";
 
 const orders = [
@@ -30,6 +31,13 @@ const OrdersPage = (props) => {
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
+  const columns = [
+    { title: "ORDER ID", key: "id" },
+    { title: "PRODUCT", key: "product" },
+    { title: "STATUS", key: "status" },
+    { title: "DATE", key: "date" },
+  ];
+
   return (
     <div className=" bg-white p-4">
       <div className=" mx-auto py-6 sm:px-6 lg:px-8">
@@ -43,67 +51,9 @@ const OrdersPage = (props) => {
             className="p-2 border border-gray-300 rounded-md"
           />
         </div>
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg ">
-          <table className="min-w-full divide-y divide-gray-200 ">
-            <thead className="bg-gray-50">
-              <tr>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider"
-                >
-                  Order ID
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider"
-                >
-                  Product
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider"
-                >
-                  Status
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider"
-                >
-                  Date
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {currentOrders.length > 0 ? (
-                currentOrders.map((order) => (
-                  <tr key={order.id}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {order.id}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm ">
-                      {order.product}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm ">
-                      {order.status}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm ">
-                      {order.date}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="4"
-                    className="px-6 py-4 whitespace-nowrap text-sm  text-center"
-                  >
-                    No orders found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+
+        <Table rows={currentOrders} columns={columns} />
+
         <Pagination
           productsPerPage={ordersPerPage}
           totalProducts={filteredOrders.length}
