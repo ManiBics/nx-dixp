@@ -22,7 +22,10 @@ const Table = ({ rows, columns }) => {
             rows.map((row) => (
               <tr key={row.id}>
                 {columns.map((column) => (
-                  <td className="px-6 py-4 whitespace-nowrap text-sm ">
+                  <td
+                    key={column.key}
+                    className="px-6 py-4 whitespace-nowrap text-sm "
+                  >
                     {column.key === "image" ? (
                       <img
                         src={row.image}
