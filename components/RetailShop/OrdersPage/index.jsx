@@ -1,4 +1,5 @@
 // src/components/OrdersPage.js
+import Pagination from "@/components/common/Pagination";
 import React, { useState } from "react";
 
 const orders = [
@@ -11,7 +12,7 @@ const orders = [
   // Add more orders as needed
 ];
 
-const OrdersPage = () => {
+const OrdersPage = (props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 5;
@@ -26,13 +27,8 @@ const OrdersPage = () => {
     indexOfFirstOrder,
     indexOfLastOrder
   );
-  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
 
-  const handlePageChange = (page) => {
-    if (page > 0 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className=" bg-white p-4">
@@ -108,35 +104,14 @@ const OrdersPage = () => {
             </tbody>
           </table>
         </div>
-        <div className="flex justify-center items-center mt-4">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-3 py-1 mx-1 border border-gray-300 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300"
-          >
-            Previous
-          </button>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index + 1}
-              onClick={() => handlePageChange(index + 1)}
-              className={`px-3 py-1 ${
-                currentPage === index + 1
-                  ? "bg-[#1976d2] text-white"
-                  : "bg-gray-200 text-gray-800"
-              } rounded-md focus:outline-none mx-1`}
-            >
-              {index + 1}
-            </button>
-          ))}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-3 py-1 mx-1 border border-gray-300 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300"
-          >
-            Next
-          </button>
-        </div>
+        <Pagination
+          productsPerPage={ordersPerPage}
+          totalProducts={filteredOrders.length}
+          setPaginate={handlePageChange}
+          currentPage={currentPage}
+          PreviousText={props.paginationPrevious || "Previous"}
+          NextText={props.paginationNext || "Next"}
+        />
       </div>
     </div>
   );
