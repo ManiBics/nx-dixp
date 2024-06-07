@@ -7,7 +7,7 @@ import { getLocale } from "@/utils";
 import { getPageFromSlug } from "@/utils/content";
 import { useBackDrop } from "@/context/BackDropContext";
 
-const OrderDetails = () => {
+const OrderDetails = (props) => {
   const router = useRouter();
   const [order, setOrder] = useState({ lineItems: [] });
   const searchParams = useSearchParams();
@@ -65,18 +65,10 @@ const OrderDetails = () => {
     0
   );
 
-  const columns = [
-    { title: "IMAGE", key: "image" },
-    { title: "NAME", key: "name" },
-    { title: "SKU", key: "sku" },
-    { title: "QUANTITY", key: "quantity" },
-    { title: "PRICE", key: "price" },
-  ];
-
   return (
     <div className="bg-white p-8">
       <div className="flex justify-between">
-        <h1 className="text-2xl font-bold mb-4">Order Details</h1>
+        <h1 className="text-2xl font-bold mb-4">{props.title}</h1>
         <div>
           <Button
             onClick={() => {
@@ -85,17 +77,17 @@ const OrderDetails = () => {
             size="small"
             variant="outlined"
           >
-            Back
+            {props.backButton.label}
           </Button>
         </div>
       </div>
       <div className="mb-4">
         <h2 className="text-lg">
-          Order ID:{" "}
+          {props.orderIdField}{" "}
           <span className={`font-semibold`}>{orderContentful.id || ""}</span>
         </h2>
         <p className="text-gray-700">
-          Date:{" "}
+          {props.date}{" "}
           <span className={`font-semibold`}>
             {orderContentful.createdAt
               ? new Date(orderContentful.createdAt).toDateString()
@@ -103,18 +95,18 @@ const OrderDetails = () => {
           </span>
         </p>
         <p className="text-gray-700">
-          Status:{" "}
+          {props.status}{" "}
           <span className={`font-semibold text-green-600`}>
             {orderContentful.orderState || ""}
           </span>
         </p>
       </div>
       <div>
-        <h3 className="text-lg font-semibold mb-2">Items</h3>
-        <Table rows={orderContentful.lineItems} columns={columns} />
+        <h3 className="text-lg font-semibold mb-2">{props.itemText}</h3>
+        <Table rows={orderContentful.lineItems} columns={props.itemColumn} />
       </div>
       <div className="mt-4 flex justify-end">
-        <div className="text-lg font-semibold">Total:</div>
+        <div className="text-lg font-semibold">{props.totalvaluetext}</div>
         <div className="text-lg font-semibold ml-4">
           ${(total / 100).toFixed(2)}
         </div>
