@@ -16,6 +16,7 @@ import { useParams } from "next/navigation";
 import { useBackDrop } from "@/context/BackDropContext";
 import OrdersPage from "../RetailShop/OrdersPage";
 import OrderDetails from "../RetailShop/OrderDetails";
+import Login from "../RetailShop/Login";
 
 const componentMap = {
   headerSection: RetailHeader,
@@ -29,6 +30,7 @@ const componentMap = {
   home: ThankYouPage,
   ordersContent: OrdersPage,
   orderDetailsContent: OrderDetails,
+  dynamicImageAndCard: Login,
 };
 
 const DynamicComp = () => {
