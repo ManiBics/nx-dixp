@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const Table = ({ rows, columns }) => {
@@ -32,6 +33,13 @@ const Table = ({ rows, columns }) => {
                         alt={row.name}
                         className="h-10 w-10 rounded object-cover"
                       />
+                    ) : column.key === "viewMore" ? (
+                      <Link
+                        href={`/order-details?id=${row.id}`}
+                        className="text-[#1976d2] underline"
+                      >
+                        View more
+                      </Link>
                     ) : (
                       row[column.key]
                     )}
