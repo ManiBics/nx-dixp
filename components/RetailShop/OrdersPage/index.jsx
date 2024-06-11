@@ -1,26 +1,54 @@
 // src/components/OrdersPage.js
 import Pagination from "@/components/common/Pagination";
 import Table from "@/components/common/Table";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const orders = [
-  { id: 1, product: "Product 1", status: "Shipped", date: "2024-06-01" },
-  { id: 2, product: "Product 2", status: "Processing", date: "2024-06-03" },
-  { id: 3, product: "Product 3", status: "Delivered", date: "2024-06-02" },
-  { id: 4, product: "Product 3", status: "Delivered", date: "2024-06-02" },
-  { id: 5, product: "Product 3", status: "Delivered", date: "2024-06-02" },
-  { id: 6, product: "Product 3", status: "Delivered", date: "2024-06-02" },
-  // Add more orders as needed
-];
-
+ 
 const OrdersPage = (props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [orders, setOrders] = useState([])
   const ordersPerPage = 5;
 
+   
   const filteredOrders = orders.filter((order) =>
-    order.product.toLowerCase().includes(searchTerm.toLowerCase())
+    order.id.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  useEffect(()=>{
+
+    const fetchApi = async()=>{
+     const res = await fetch('/api/getOrders')
+     const data = await res.json()
+    
+     const line_items = data.results.map((item) => {
+       
+      
+      const {
+        id,
+        nofitems,
+        quantity,
+        totalPrice,
+        orderState,
+        createdAt,
+      } = item;
+      return {
+        id,
+        nofitems:item.lineItems.reduce((a,b)=>a+b.quantity,0),
+        quantity:item.lineItems.length,
+        totalPrice:'$ '+totalPrice.centAmount / 100  ,
+        orderState,
+        createdAt:new Date(createdAt).toDateString()
+      };
+    });
+     
+     
+     setOrders(line_items)
+    
+    }
+    fetchApi()
+  }
+  ,[])
 
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
@@ -33,9 +61,11 @@ const OrdersPage = (props) => {
 
   const columns = [
     { title: "ORDER ID", key: "id" },
-    { title: "PRODUCT", key: "product" },
-    { title: "STATUS", key: "status" },
-    { title: "DATE", key: "date" },
+    { title: "No. of order items", key: "quantity" },
+    { title: "Total quantity of items", key: "nofitems" },
+    { title: "Total Price", key: "totalPrice" },
+    { title: "Order status", key: "orderState" },
+    { title: "Date Created", key: "createdAt" },
   ];
 
   return (
