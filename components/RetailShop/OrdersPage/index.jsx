@@ -1,54 +1,43 @@
 // src/components/OrdersPage.js
 import Pagination from "@/components/common/Pagination";
 import Table from "@/components/common/Table";
+import { useUser } from "@/context/UserContext";
 import React, { useEffect, useState } from "react";
 
- 
 const OrdersPage = (props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [orders, setOrders] = useState([])
+  const [orders, setOrders] = useState([]);
+  const { user } = useUser();
   const ordersPerPage = 5;
 
-   
   const filteredOrders = orders.filter((order) =>
     order.id.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  useEffect(()=>{
+  useEffect(() => {
+    const fetchApi = async () => {
+      const res = await fetch(`/api/getOrders?customerId=${user.id}`);
+      const data = await res.json();
 
-    const fetchApi = async()=>{
-     const res = await fetch('/api/getOrders')
-     const data = await res.json()
-    
-     const line_items = data.results.map((item) => {
-       
-      
-      const {
-        id,
-        nofitems,
-        quantity,
-        totalPrice,
-        orderState,
-        createdAt,
-      } = item;
-      return {
-        id,
-        nofitems:item.lineItems.reduce((a,b)=>a+b.quantity,0),
-        quantity:item.lineItems.length,
-        totalPrice:'$ '+totalPrice.centAmount / 100  ,
-        orderState,
-        createdAt:new Date(createdAt).toDateString()
-      };
-    });
-     
-     
-     setOrders(line_items)
-    
-    }
-    fetchApi()
-  }
-  ,[])
+      const line_items = data.results.map((item) => {
+        const { id, orderState, createdAt, lineItems } = item;
+        return {
+          id,
+          quantity: lineItems.reduce((a, b) => a + b.quantity, 0),
+          nofitems: lineItems.length,
+          totalPrice:
+            "$ " +
+            lineItems.reduce((a, b) => a + b.price.value.centAmount, 0) / 100,
+          orderState,
+          createdAt: new Date(createdAt).toDateString(),
+        };
+      });
+
+      setOrders(line_items);
+    };
+    if (user.id) fetchApi();
+  }, [user.id]);
 
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
@@ -61,11 +50,12 @@ const OrdersPage = (props) => {
 
   const columns = [
     { title: "ORDER ID", key: "id" },
-    { title: "No. of order items", key: "quantity" },
-    { title: "Total quantity of items", key: "nofitems" },
+    { title: "No. of order items", key: "nofitems" },
+    { title: "Total quantity of items", key: "quantity" },
     { title: "Total Price", key: "totalPrice" },
     { title: "Order status", key: "orderState" },
     { title: "Date Created", key: "createdAt" },
+    { title: "Action", key: "viewMore" },
   ];
 
   return (

@@ -50,7 +50,7 @@ const Table = ({ rows, columns }) => {
           ) : (
             <tr>
               <td
-                colSpan="4"
+                colSpan="12"
                 className="px-6 py-4 whitespace-nowrap text-sm  text-center"
               >
                 No orders found
