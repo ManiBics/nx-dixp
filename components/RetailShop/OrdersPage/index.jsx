@@ -1,6 +1,7 @@
 // src/components/OrdersPage.js
 import Pagination from "@/components/common/Pagination";
 import Table from "@/components/common/Table";
+import { useBackDrop } from "@/context/BackDropContext";
 import { useUser } from "@/context/UserContext";
 import React, { useEffect, useState } from "react";
 
@@ -9,6 +10,7 @@ const OrdersPage = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [orders, setOrders] = useState([]);
   const { user } = useUser();
+  const { showBackDrop, hideBackDrop } = useBackDrop();
   const ordersPerPage = 5;
 
   const filteredOrders = orders.filter((order) =>
@@ -17,6 +19,7 @@ const OrdersPage = (props) => {
 
   useEffect(() => {
     const fetchApi = async () => {
+      showBackDrop();
       const res = await fetch(`/api/getOrders?customerId=${user.id}`);
       const data = await res.json();
 
@@ -35,6 +38,7 @@ const OrdersPage = (props) => {
       });
 
       setOrders(line_items);
+      hideBackDrop();
     };
     if (user.id) fetchApi();
   }, [user.id]);
