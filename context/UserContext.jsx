@@ -17,9 +17,11 @@ const UserProvider = ({ children }) => {
     // if (res?.accessToken) {
     const data = await getCustomer(credential.email);
     const customerData = data?.results[0] || {};
-    localStorage.setItem("customerId", customerData.id);
-    setUser(customerData);
-    router.push("/");
+    if (customerData.id) {
+      localStorage.setItem("customerId", customerData.id);
+      setUser(customerData);
+      router.push("/");
+    }
     // }
     hideBackDrop();
   };
