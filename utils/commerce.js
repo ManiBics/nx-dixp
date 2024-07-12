@@ -14,6 +14,7 @@ async function getCommerceAccessToken() {
       grant_type: "client_credentials",
       scope: process.env.CT_SCOPE,
     }),
+    next: { revalidate: 43200 },
   });
 
   const data = await response.json();
