@@ -9,22 +9,16 @@ const Checkout = (props) => {
   const handleSubmit = async () => {
     showBackDrop();
     const line_items = props.items.map((item) => {
-      const {
-        quantity,
-        pricevalue,
-        productTitle1,
-        productDescription,
-        productImage,
-      } = item;
+      const { quantity, pricevalue, name, description, image } = item;
       return {
         quantity,
         price_data: {
           currency,
           unit_amount: Math.round(pricevalue * 100),
           product_data: {
-            name: productTitle1,
-            description: productDescription,
-            images: [productImage.src],
+            name,
+            description,
+            images: [image],
           },
         },
       };
@@ -52,10 +46,10 @@ const Checkout = (props) => {
     <Button
       disabled={props.hasOutOfStock}
       onClick={handleSubmit}
-      variant={props.theme}
+      variant={props.theme || "contained"}
       color="success"
     >
-      {props.label}
+      {props.label || "Checkout"}
     </Button>
   );
 };

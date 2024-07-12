@@ -17,10 +17,11 @@ import { useBackDrop } from "@/context/BackDropContext";
 import OrdersPage from "../RetailShop/OrdersPage";
 import OrderDetails from "../RetailShop/OrderDetails";
 import Login from "../RetailShop/Login";
+import TabContent from "../RetailShop/Home/TabContent";
 
 const componentMap = {
   headerSection: RetailHeader,
-  stats: FeaturedProducts,
+  stats: TabContent,
   bulletPoint: CustomerSay,
   footerSection: RetailFooter,
   brandSection: WelcomeBanner,
