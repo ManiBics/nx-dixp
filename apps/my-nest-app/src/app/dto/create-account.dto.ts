@@ -15,16 +15,4 @@ export class CreateAccountDto {
   @IsString()
   @IsNotEmpty()
   readonly password: string;
-
-  @IsString()
-  @IsNotEmpty()
-  readonly accessToken: string;
-
-  @IsNumber()
-  @IsNotEmpty()
-  readonly forgotPasswordAccessToken: number;
-
-  @IsDate()
-  @IsNotEmpty()
-  readonly forgotPasswordExpiresIn: Date;
 }
