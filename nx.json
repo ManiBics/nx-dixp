@@ -2,7 +2,10 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "defaultBase": "master",
   "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
     "production": [
       "default",
       "!{projectRoot}/cypress/**/*",
@@ -48,7 +51,9 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["apps/my-nest-app-e2e/**/*"]
+      "exclude": [
+        "apps/nest-app-e2e/**/*"
+      ]
     },
     {
       "plugin": "@nx/webpack/plugin",

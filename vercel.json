@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "projects": {
+    "next-app": {
+      "src": "apps/next-app",
+      "use": "@vercel/next"
+    },
+    "nest-app": {
+      "src": "apps/nest-app",
+      "use": "@vercel/node"
+    }
+  },
+  "builds": [
+    {
+      "src": "apps/next-app/next.config.js",
+      "use": "@vercel/next"
+    },
+    {
+      "src": "apps/nest-app/dist/main.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "apps/nest-app/dist/main.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "apps/next-app/$1"
+    }
+  ]
+}
